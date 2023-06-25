@@ -1,0 +1,133 @@
+
+{% load static %}
+<html>
+    <head>
+        <title>Questionnaire</title>
+        <link rel = 'stylesheet' href = "{% static 'questionnaireStyle.css' %}"/>
+    </head>
+    <body>
+        <div id="main_container">
+            <div id="form_container">
+                <form>
+                    <div class="form_div", id = "form_div_main">
+                        <h1>Question</h1>
+                        <input class = "qinput" type="text" name="question" />
+                    </div>
+                    <div class="q_div">
+                        <h1>Answer</h1>
+                        <input class = "qinput" type="text" name="answers" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <button id="addQuestion">
+            Add Question
+        </button>
+        <button id="addAnswer">
+            Add Answer
+        </button>
+        <button id = "save">
+            Save
+        </button>
+
+        <script>
+            let container = document.querySelector("#form_container");
+            let main_container = document.querySelector("#main_container");
+            let addQuestionButton = document.querySelector('#addQuestion');
+            let addAnswerButton = document.querySelector('#addAnswer');
+            let saveButton = document.querySelector('#save');
+            let formCount = 1;
+            let ansCount = 1;
+            let dict = {}
+
+            addQuestionButton.addEventListener('click', addForm);
+            addAnswerButton.addEventListener('click', addAnswer);
+            saveButton.addEventListener('click', save)
+
+            function addForm() {
+                let formDiv = document.createElement('div');
+                formDiv.innerHTML = document.querySelector('#form_div_main').innerHTML; // # for id, . for classes
+                formDiv.classList.add('form_div');
+
+                main_container.appendChild(formDiv);
+                formCount++;
+            }
+
+            function addAnswer() {
+                let qDiv = document.createElement('div');
+                qDiv.innerHTML = document.querySelector('.q_div').innerHTML;
+                qDiv.classList.add('q_div');
+                try{
+                    let formDiv = document.querySelector('.form_div:last-child');
+                    formDiv.appendChild(qDiv);
+                }
+                catch(err){
+                    console.log('error encountered, automatically appended answer to question 1')
+                    container.appendChild(qDiv);
+                }
+                
+                ansCount++;
+            }
+
+            function save(){
+                // get the first question-answer set and add it to the dictionary
+
+                let q1 = document.getElementsByClassName('qinput')[0].value
+                let nested = {}
+                let list_of_answers = Array.from(document.getElementsByClassName('qinput')) // puts all the qinputs (which includes question and answer inputs) in an array
+                for(let i=1; i<list_of_answers.length; i++){
+                    let required_answer = document.getElementsByClassName('qinput')[i].value
+                    nested[required_answer]=0
+                }
+                dict[q1]=nested
+            }
+
+          /*  function save() {
+                let formDiv = document.getElementsByClassName('form_div')[0];
+                let inputElements = formDiv.querySelectorAll('.qinput');
+                let qDiv = document.getElementsByClassName('q_div')[0];
+                let answerElements = Array.from(qDiv.getElementsByClassName('qinput'));
+                let value = "";
+                let value2 = "";
+
+        
+                inputElements.forEach((input) => {
+                    value = input.value;
+                });
+        
+                answerElements.forEach((input) => {
+                    if (input.value) {
+                        value2 += input.value
+                    }
+                });
+
+                if (value2!=''){
+                    dict[value] = value2;
+                }
+        
+                for (let k = 1; k < formCount; k++) {
+                    let answerDict = {};
+                    let inputEach = document.getElementsByClassName('form_div')[k];
+                    let qEach = inputEach.getElementsByClassName('qinput')[0].value;
+                    let ansElements = inputEach.getElementsByClassName('qinput');
+        
+                    for (let l = 0; l < ansElements.length; l++) {
+                        let ansEach = ansElements[l].value;
+                        if (ansEach) {
+                            answerDict[ansEach] = 0;
+                        }
+                    }
+        
+                    dict[qEach] = answerDict;
+                }
+            } */
+              
+        </script>
+    </body>
+</html>
+
+<!--
+    Okkk this is a VERY messed up bunch of code but just for some context, lemme try and explain how it works
+    
+-->
